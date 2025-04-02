@@ -14,3 +14,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Basic task queue implementation
 - Local model cache foundation
 - Git version control setup
+- Model quantization system with dynamic adaptation
+- Integration between model cache and quantizer

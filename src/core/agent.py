@@ -2,6 +2,7 @@ from typing import Optional, Dict, Any
 import sqlite3
 from pathlib import Path
 import logging
+from ..models.model_quantizer import ModelQuantizer
 
 
 class DigitalDoubleAgent:
@@ -85,8 +86,21 @@ class LocalModelCache:
     def __init__(self, cache_dir: str = "model_cache"):
         self.cache_dir = Path(cache_dir)
         self.cache_dir.mkdir(exist_ok=True)
+        self.quantizer = ModelQuantizer()
+        self.logger = logging.getLogger(__name__)
         
-    def get_model(self, model_name: str, quantized: bool = False) -> Any:
-        """Retrieve a model from cache or download if not available."""
-        # Will implement model loading logic
+    def get_model(self, model_name: str,
+                  available_ram_mb: int = 512) -> Any:
+        """Retrieve a model with automatic quantization
+        based on available RAM."""
+        try:
+            model = self._load_model(model_name)
+            return self.quantizer.quantize(model, available_ram_mb)
+        except Exception as e:
+            self.logger.error(f"Failed to load model {model_name}: {str(e)}")
+            raise
+            
+    def _load_model(self, model_name: str) -> Any:
+        """Internal method to load model from cache or download"""
+        # Will implement actual model loading logic
         raise NotImplementedError("Model loading not implemented")
