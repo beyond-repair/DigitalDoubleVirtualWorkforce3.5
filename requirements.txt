@@ -10,3 +10,6 @@ pyyaml>=5.4.1  # For config files
 flake8>=3.9.2
 black>=21.7b0
 mypy>=0.910
+pytest>=7.0.0
+pytest-mock>=3.7.0
+pytest-cov>=3.0.0

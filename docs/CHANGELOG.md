@@ -16,3 +16,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Git version control setup
 - Model quantization system with dynamic adaptation
 - Integration between model cache and quantizer
+- Test framework with pytest
+- Unit tests for core components
+- Coverage reporting
