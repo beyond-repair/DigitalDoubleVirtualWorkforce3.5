@@ -1,4 +1,5 @@
 import { IAgent, AgentStatus, ITask, ITaskResult } from '../interfaces/agent.interface';
+import { IAgentMetrics } from '../../interfaces/IAgent';
 import { TaskQueueService } from './queue.service';
 import { ResourceMonitorService } from './monitor.service';
 import { CommunicationService } from './communication.service';
@@ -52,6 +53,20 @@ export class AgentService implements IAgent {
     } finally {
       this.status = AgentStatus.IDLE;
     }
+  }
+
+  public async getCurrentMetrics(): Promise<IAgentMetrics> {
+    const metrics = await this.monitor.getCurrentMetrics();
+    return {
+      cpuUsage: metrics.cpuUsage,
+      memoryUsage: metrics.memoryUsage,
+      activeThreads: metrics.activeThreads,
+      taskCount: await this.getTaskCount()
+    };
+  }
+
+  public async getTaskCount(): Promise<number> {
+    return this.taskQueue.size();
   }
 
   private setupMessageHandlers(): void {

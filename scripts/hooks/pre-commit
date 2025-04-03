@@ -4,8 +4,9 @@
 . "$(dirname "$0")/common.sh"
 
 # Configuration
-VALID_FILE_PATTERN='^(src|scripts|docs)\/[a-z-]+\/[a-z-]+\.[a-z]+$'
-VALID_TEST_PATTERN='^src\/tests\/[a-z-]+\/[a-z-]+\.test\.[a-z]+$'
+# Update file and test patterns to allow deeper directory nesting
+VALID_FILE_PATTERN='^(src|scripts|docs)(\/[a-z-]+)+\/[a-z-]+\.[a-z]+$'
+VALID_TEST_PATTERN='^(src|scripts|docs)(\/[a-z-]+)+\/[a-z-]+\.test\.[a-z]+$'
 DOC_UPDATE_SCRIPT="./scripts/utils/update-docs.sh"
 TASK_GEN_SCRIPT="./scripts/utils/generate-tasks.sh"
 

@@ -1,4 +1,4 @@
-import { ISystemMetrics, IPerformanceMetrics, ITimeSeriesData } from '../interfaces/IAnalytics';
+import { ISystemMetrics, ITimeSeriesData } from '../interfaces/IAnalytics';
 
 export class AnalyticsService {
     private metrics: Map<string, ITimeSeriesData[]> = new Map();
@@ -13,6 +13,16 @@ export class AnalyticsService {
     private cleanupOldData(data: ITimeSeriesData[]): ITimeSeriesData[] {
         const cutoff = new Date();
         cutoff.setDate(cutoff.getDate() - this.RETENTION_DAYS);
+        return data.filter(item => item.timestamp >= cutoff);
+    }
+
+    public getMetrics(name: string, days: number = 7): ITimeSeriesData[] {
+        const data = this.metrics.get(name);
+        if (!data) return [];
+
+        const cutoff = new Date();
+        cutoff.setDate(cutoff.getDate() - days);
+        
         return data.filter(item => item.timestamp >= cutoff);
     }
 

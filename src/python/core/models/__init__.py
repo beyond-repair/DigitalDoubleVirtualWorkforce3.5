@@ -1,0 +1,6 @@
+from .model_quantizer import MODEL_CONFIGS, MODEL_VERSIONS, CALIBRATION_CONFIGS
+
+__all__ = [
+    'MODEL_CONFIGS', 'MODEL_VERSIONS',
+    'CALIBRATION_CONFIGS'
+]

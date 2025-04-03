@@ -1,36 +1,31 @@
-# Contributing to Digital Double Virtual Workforce
+# Contributor Guidelines
 
-## Development Setup
+## Overview
+Welcome to the Digital Double Virtual Workforce project! This document outlines the guidelines for contributing to the project, including workflows, naming conventions, and integration protocols.
 
-1. Install dependencies:
-```bash
-npm install
-```
+## Workflows
+1. **Branching Strategy**: 
+   - Use Git worktrees or dedicated feature branches for isolating features and fixes.
+   - Ensure that branches are named descriptively, e.g., `feature/add-new-module`.
 
-2. Create a feature branch:
-```bash
-git checkout -b feature/[ticket]-description
-```
+2. **Commit Messages**: 
+   - Commit changes in small, atomic increments.
+   - Use clear and descriptive messages that tie directly to project objectives.
 
-## Code Standards
+3. **Tagging Milestones**: 
+   - Tag major milestones to track significant progress points.
 
-- Use TypeScript strict mode
-- Document with JSDoc comments
-- Maintain >80% test coverage
-- Follow SOLID principles
+## Naming Conventions
+- Use a structured naming convention for files and submodules to improve clarity and scalability.
+- Example: `core/[module]/[submodule].ext`
 
-## Commit Guidelines
+## Integration Protocols
+- Ensure that all code is tested before merging into the main branch.
+- Conduct periodic scope reviews to align incremental progress with project goals.
 
-Format: `type(scope): description`
+## Documentation
+- Use `document.md` as the central hub for updates, documenting key decisions, changes, and progress.
+- Update this `CONTRIBUTING.md` file as necessary to reflect any changes in guidelines.
 
-Examples:
-- `feat(core): add memory governance`
-- `fix(security): patch token validation`
-- `docs(api): update authentication docs`
-
-## Pull Request Process
-
-1. Update documentation
-2. Add/update tests
-3. Ensure CI passes
-4. Request review from maintainers
+## Contact
+For any questions or clarifications, please reach out to the project maintainers.

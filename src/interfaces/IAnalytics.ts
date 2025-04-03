@@ -18,3 +18,7 @@ export interface IPerformanceMetrics {
     taskThroughput: ITimeSeriesData[];
     errorRate: ITimeSeriesData[];
 }
+
+export interface IAnalyticsService {
+    getMetrics(name: string, days: number): ITimeSeriesData[];
+}

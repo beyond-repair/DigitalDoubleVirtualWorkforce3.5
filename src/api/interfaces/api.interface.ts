@@ -1,4 +1,3 @@
-import { ITask, ITaskResult } from '../../core/interfaces/agent.interface';
 import { IResourceMetrics } from '../../core/interfaces/monitor.interface';
 
 export interface IApiResponse<T> {
@@ -20,4 +19,5 @@ export interface IApiConfig {
   corsOrigins: string[];
   rateLimitRequests: number;
   rateLimitWindow: number;
+  apiKey: string;
 }

@@ -1,6 +1,14 @@
 import { Request, Response } from 'express';
 import { AgentService } from '../../core/services/agent.service';
-import { IApiResponse, IAgentStatus } from '../interfaces/api.interface';
+import { IApiResponse } from '../interfaces/api.interface';
+import { AgentStatus, IAgentMetrics } from '../../interfaces/IAgent';
+
+interface IAgentStatus {
+  id: string;
+  status: AgentStatus;
+  metrics: IAgentMetrics;
+  taskCount: number;
+}
 
 export class AgentController {
   constructor(private agents: Map<string, AgentService>) {}
@@ -11,8 +19,8 @@ export class AgentController {
         Array.from(this.agents.values()).map(async (agent) => ({
           id: agent.id,
           status: agent.status,
-          metrics: await agent.monitor.getCurrentMetrics(),
-          taskCount: await agent.taskQueue.size()
+          metrics: await agent.getCurrentMetrics(),
+          taskCount: await agent.getTaskCount()
         }))
       );
 

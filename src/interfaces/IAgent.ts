@@ -18,4 +18,5 @@ export interface IAgent {
     metrics: IAgentMetrics;
     lastHeartbeat: Date;
     currentTask?: string;
+    getTaskCount(): Promise<number>;
 }
