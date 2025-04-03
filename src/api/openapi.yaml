@@ -1,0 +1,25 @@
+openapi: 3.0.0
+info:
+  title: Digital Double Virtual Workforce API
+  version: 3.5.0
+  description: API for managing virtual workforce agents
+
+security:
+- ApiKeyAuth: []
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+
+paths:
+  /agents:
+    get:
+      summary: List all agents
+      responses:
+        '200':
+          description: List of agents
+        '401':
+          description: Unauthorized

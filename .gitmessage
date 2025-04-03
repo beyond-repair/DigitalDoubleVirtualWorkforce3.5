@@ -1,0 +1,37 @@
+# <type>(<scope>): <description>
+#
+# [optional body]
+# - What: Describe the changes made
+# - Why: Explain the reason for changes
+# - Impact: List affected modules/components
+#
+# [optional footer]
+# - Related Issues: #issue_number
+# - Breaking Changes: (if any)
+# - Reviewers: @mentions
+#
+# Types:
+#   feat     (new feature)
+#   fix      (bug fix)
+#   docs     (documentation)
+#   style    (formatting)
+#   refactor (code restructuring)
+#   test     (adding tests)
+#   chore    (maintenance)
+#
+# Scope examples:
+#   core     (core functionality)
+#   api      (API related)
+#   ui       (user interface)
+#   docs     (documentation)
+#   test     (test infrastructure)
+#
+# Example:
+# feat(core): implement resource monitoring system
+#
+# What: Added CPU and memory tracking capabilities
+# Why: Enable better agent performance analysis
+# Impact: Agent module, Metrics service
+#
+# Related Issues: #123
+# Reviewers: @tech-lead

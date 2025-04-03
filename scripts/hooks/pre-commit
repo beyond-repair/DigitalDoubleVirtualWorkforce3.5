@@ -1,0 +1,49 @@
+#!/bin/sh
+
+# Source common functions
+. "$(dirname "$0")/common.sh"
+
+# Configuration
+VALID_FILE_PATTERN='^(src|scripts|docs)\/[a-z-]+\/[a-z-]+\.[a-z]+$'
+VALID_TEST_PATTERN='^src\/tests\/[a-z-]+\/[a-z-]+\.test\.[a-z]+$'
+DOC_UPDATE_SCRIPT="./scripts/utils/update-docs.sh"
+TASK_GEN_SCRIPT="./scripts/utils/generate-tasks.sh"
+
+# Get staged files
+files=$(git diff --cached --name-only --diff-filter=ACM)
+
+# Validation functions
+validate_file_structure() {
+    local file="$1"
+    
+    if ! echo "$file" | grep -qE "$VALID_FILE_PATTERN|$VALID_TEST_PATTERN"; then
+        error "Invalid file location or naming: $file"
+        error "Files must follow pattern: src/module/file.ext or src/tests/module/file.test.ext"
+        return 1
+    fi
+    
+    return 0
+}
+
+# Auto-documentation update
+update_documentation() {
+    if [ -f "$DOC_UPDATE_SCRIPT" ]; then
+        sh "$DOC_UPDATE_SCRIPT" "$files" || return 1
+    fi
+}
+
+# Task generation
+generate_tasks() {
+    if [ -f "$TASK_GEN_SCRIPT" ]; then
+        sh "$TASK_GEN_SCRIPT" "$files" || return 1
+    fi
+}
+
+# Run validations
+for file in $files; do
+    validate_file_structure "$file" || exit 1
+done
+
+# Update documentation and generate tasks
+update_documentation || exit 1
+generate_tasks || exit 1

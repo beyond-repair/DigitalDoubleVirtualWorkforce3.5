@@ -1,0 +1,6 @@
+[core]
+    editor = "C:\\Users\\willi\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe" --wait
+[commit]
+    template = .gitmessage
+[hook]
+    validatecommit = true

@@ -1,0 +1,25 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Validate Commit Messages
+        run: |
+          bash ./scripts/validate-commits.sh
+          
+      - name: Run Tests
+        run: |
+          bash ./scripts/run-tests.sh
+          
+      - name: Check Documentation
+        run: |
+          bash ./scripts/check-docs.sh

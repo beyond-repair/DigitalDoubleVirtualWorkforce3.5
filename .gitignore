@@ -9,20 +9,32 @@ venv/
 .venv/
 env/
 
-# IDE
+# IDE and editor files
 .vscode/
 .idea/
+*.swp
+*.swo
 
 # Build artifacts
 build/
 dist/
-*.egg-info/
+
+# Dependencies
+node_modules/
+vendor/
+
+# Test coverage
+coverage/
+
+# Logs
+*.log
+logs/
 
 # Logs and databases
-*.log
 *.sqlite
 *.db
 
-# OS generated files
+# Operating System
 .DS_Store
 Thumbs.db
+.qodo

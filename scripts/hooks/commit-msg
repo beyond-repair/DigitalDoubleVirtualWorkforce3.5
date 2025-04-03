@@ -1,0 +1,53 @@
+#!/bin/sh
+
+# Source common functions
+. "$(dirname "$0")/common.sh"
+
+# Configuration
+MIN_LENGTH=10
+MAX_LENGTH=72
+PATTERN='^(feat|fix|docs|style|refactor|test|chore)(\([a-z]+\))?: [A-Z].+'
+TYPES="feat, fix, docs, style, refactor, test, chore"
+
+# Read the commit message
+commit_msg=$(cat "$1")
+
+# Validate commit message
+validate_commit_message() {
+    local message="$1"
+    
+    # Check if empty
+    if [ -z "$message" ]; then
+        error "Empty commit message is not allowed"
+        error "Example: feat(auth): Add user authentication"
+        return 1
+    fi
+
+    # Check minimum length
+    if [ ${#message} -lt $MIN_LENGTH ]; then
+        error "Commit message must be at least $MIN_LENGTH characters long"
+        error "Current length: ${#message}"
+        return 1
+    fi
+
+    # Check maximum length
+    if [ ${#message} -gt $MAX_LENGTH ]; then
+        error "Commit message must not exceed $MAX_LENGTH characters"
+        error "Current length: ${#message}"
+        return 1
+    fi
+
+    # Validate format and capitalization
+    if ! echo "$message" | grep -qE "$PATTERN"; then
+        error "Invalid commit message format"
+        error "Format: type(scope): Subject"
+        error "Types: $TYPES"
+        error "- Subject must start with a capital letter"
+        error "Example: feat(auth): Add user authentication"
+        return 1
+    fi
+
+    return 0
+}
+
+validate_commit_message "$commit_msg" || exit 1
