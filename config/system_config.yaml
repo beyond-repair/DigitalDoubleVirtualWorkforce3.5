@@ -1,0 +1,21 @@
+system:
+  version: "3.5.0"
+  log_level: "INFO"
+  max_workers: 4
+
+api:
+  port: 3000
+  cors_origins:
+  - "http://localhost:3000"
+  - "https://app.digitaldouble.ai"
+
+ml:
+  model_path: "./models"
+  inference_mode: "edge"
+  quantization: true
+  min_training_points: 1000
+
+security:
+  enable_tee: true
+  gdpr_compliance: true
+  audit_trail: true

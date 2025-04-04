@@ -11,9 +11,13 @@ describe('AgentController', () => {
         const config: IApiConfig = {
             port: 3000,
             corsOrigins: ['*'],
-            rateLimitRequests: 100,
-            rateLimitWindow: 60,
-            apiKey: process.env.OPENROUTER_API_KEY || 'test-key'
+            rateLimitRequests: 100, // Restored property
+            rateLimitWindow: 60,    // Restored property
+            apiKey: process.env.OPENROUTER_API_KEY || 'test-key', // Restored property
+            logger: {
+                info: jest.fn(),
+                error: jest.fn(),
+            },
         };
         apiServer = new ApiServer(config);
         apiServer.start(); // Start the server to set up middleware and routes

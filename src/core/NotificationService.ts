@@ -1,40 +1,36 @@
-import { INotification, NotificationChannel } from '../interfaces/INotification';
-import WebSocket from 'ws';
+import { INotification } from '../interfaces/INotification';
 
 export class NotificationService {
-    private wsClients: Map<string, WebSocket> = new Map();
     private notifications: INotification[] = [];
 
-    public async sendNotification(notification: Omit<INotification, 'id' | 'createdAt'>): Promise<INotification> {
-        const newNotification: INotification = {
-            ...notification,
-            id: crypto.randomUUID(),
-            createdAt: new Date()
+    // Create a new notification
+    public createNotification(message: string, userId: string): INotification {
+        const notification: INotification = {
+            id: this.generateId(),
+            message,
+            timestamp: new Date(),
+            userId,
+            read: false,
         };
-
-        for (const channel of notification.channels) {
-            await this.deliverToChannel(newNotification, channel);
-        }
-
-        this.notifications.push(newNotification);
-        return newNotification;
+        this.notifications.push(notification);
+        return notification;
     }
 
-    private async deliverToChannel(notification: INotification, channel: NotificationChannel): Promise<void> {
-        switch (channel) {
-            case NotificationChannel.WEBSOCKET:
-                this.broadcastToWebSocket(notification);
-                break;
-            // Implement other channels
+    // Retrieve all notifications for a user
+    public getNotifications(userId: string): INotification[] {
+        return this.notifications.filter(notification => notification.userId === userId);
+    }
+
+    // Mark a notification as read
+    public markAsRead(notificationId: string): void {
+        const notification = this.notifications.find(n => n.id === notificationId);
+        if (notification) {
+            notification.read = true;
         }
     }
 
-    private broadcastToWebSocket(notification: INotification): void {
-        const message = JSON.stringify(notification);
-        this.wsClients.forEach(client => {
-            if (client.readyState === WebSocket.OPEN) {
-                client.send(message);
-            }
-        });
+    // Generate a unique ID for notifications
+    private generateId(): string {
+        return Math.random().toString(36).substr(2, 9);
     }
 }

@@ -1,15 +1,18 @@
 # Development Guidelines
 
-## Module Structure
+## Project Structure
 ```
-core/
-  ├── ml/                 # Machine Learning components
-  │   ├── models/        # Model definitions
-  │   ├── training/      # Training pipelines
-  │   └── evaluation/    # Evaluation tools
-  ├── api/               # API interfaces
-  ├── storage/           # Data persistence
-  └── monitoring/        # System monitoring
+project/
+  ├── src/
+  │   ├── core/         # Core system functionality
+  │   │   ├── ml/       # Machine Learning components
+  │   │   ├── api/      # API interfaces
+  │   │   └── storage/  # Data persistence
+  │   ├── modules/      # Feature modules
+  │   └── utils/        # Shared utilities
+  ├── tests/            # Test suites
+  ├── docs/             # Documentation
+  └── scripts/          # Build and utility scripts
 ```
 
 ## Version Control
@@ -18,17 +21,17 @@ core/
 - Tag releases with: `v[X.Y.Z]`
 
 ## Development Workflow
-1. Create feature branch from `develop`
+1. Create feature branch from `develop` using `feature/[module]/[description]`
 2. Update documentation first
-3. Implement tests
-4. Write code
+3. Implement tests (90% coverage minimum)
+4. Write code following standards
 5. Update CHANGELOG.md
 6. Submit PR
 
 ## Code Standards
-- Follow PEP 8
+- Follow PEP 8 for Python
+- TypeScript/JavaScript using provided tsconfig
 - Type hints required
-- 90% test coverage minimum
 - Documentation required for public APIs
 
 ## Review Process

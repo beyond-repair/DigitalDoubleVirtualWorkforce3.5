@@ -1,5 +1,71 @@
 # Digital Double Virtual Workforce 3.5
 
+## Overview
+
+This project implements an AI-driven workflow automation system. For more information, visit [our documentation site](https://docs.digital-double.com).
+
+## Project Status & Organization
+
+- Current Version: 3.5.0
+- Development Status: Active Reorganization
+- Repository: [GitHub Repository](https://github.com/digital-double/virtual-workforce)
+
+## Directory Structure
+
+```bash
+src/
+  ├── core/           # Core TypeScript services
+  ├── python/         # Python ML & quantization 
+  ├── modules/        # Pluggable modules
+  └── interfaces/     # Shared type definitions
+```
+
+## Getting Started
+
+```bash
+npm install
+npm run build
+npm start
+```
+
+## Current Focus
+
+1. File consolidation and organization
+2. Documentation centralization
+3. Implementation of model quantization
+4. Integration of compliance features
+
+## Development Guidelines
+
+### Code Structure
+
+- Use modular architecture with clear separation of concerns
+- Follow the `src/[domain]/[module]` structure
+- Keep files focused and single-responsibility
+
+### Naming Conventions
+
+- Use PascalCase for class names
+- Use camelCase for methods and variables
+- Use UPPER_SNAKE_CASE for constants
+
+### Version Control
+
+- Create feature branches from main
+- Use atomic commits with clear messages
+- Tag releases using semantic versioning
+
+## Next Steps
+
+1. Create interface definitions for the MLService
+2. Add unit tests for the updated functionality
+3. Implement logging service
+4. Set up CI/CD pipeline configuration
+
+Would you like me to continue with any of these next steps?
+
+---
+
 ## The Edge-Ready AI Agent Framework
 
 A next-generation, robust platform for building industrial-grade autonomous agents optimized for real-world constraints, security, and adaptability.
@@ -17,23 +83,19 @@ A next-generation, robust platform for building industrial-grade autonomous agen
    - [Resource Governor](#resource-governor)
    - [Compliance & Security Center](#compliance--security-center)
    - [Deployment & DevOps Enhancements](#deployment--devops-enhancements)
-5. [Development Guidelines](#development-guidelines)
-6. [Technical Implementation Details](#technical-implementation-details)
-   - [Core Agent Architecture](#core-agent-architecture)
-   - [Toolkit Integration Protocol](#toolkit-integration-protocol)
-7. [Expanded Toolkit Safety Matrix](#expanded-toolkit-safety-matrix)
-8. [Enterprise-Grade Failovers](#enterprise-grade-failovers)
-9. [Edge Deployment Packages](#edge-deployment-packages)
-10. [Monetization](#monetization)
-11. [Roadmap](#roadmap)
-12. [Review](#review)
-13. [Plain Prompt for ROO Code to Build](#plain-prompt-for-roo-code-to-build)
+5. [Expanded Toolkit Safety Matrix](#expanded-toolkit-safety-matrix)
+6. [Enterprise-Grade Failovers](#enterprise-grade-failovers)
+7. [Edge Deployment Packages](#edge-deployment-packages)
+8. [Monetization](#monetization)
+9. [Roadmap](#roadmap)
+10. [Review](#review)
+11. [Plain Prompt for ROO Code to Build](#plain-prompt-for-roo-code-to-build)
 
 ---
 
 ## Core Philosophy
 
-## Important Note
+**"No AR/VR? No problem."**  
 
 Designed for reliability, security, and graceful degradation across:
 
@@ -129,62 +191,6 @@ class SafetyToolkitWrapper:
 
 ---
 
-## Development Guidelines
-
-- **Coding Standards**
-  - Use TypeScript for type safety
-  - Follow SOLID principles
-  - Document public APIs with JSDoc
-  - Unit test coverage >80%
-
-- **Git Workflow**
-  - Feature branches: `feature/[ticket]-description`
-  - Hotfixes: `hotfix/[ticket]-description`
-  - Releases: `release/v[major].[minor].[patch]`
-  - Protected main branch with PR reviews
-
-- **Module Structure**
-
-```
-src/
-  ├── core/           # Core agent functionality
-  ├── toolkits/       # Plugin system for tools
-  ├── security/       # Security & compliance
-  ├── orchestration/  # Agent management
-  └── types/          # TypeScript definitions
-```
-
----
-
-## Technical Implementation Details
-
-### Core Agent Architecture
-
-```typescript
-interface AgentCore {
-  readonly id: string;
-  readonly config: AgentConfig;
-  state: AgentState;
-  
-  initialize(): Promise<void>;
-  execute(task: Task): Promise<Result>;
-  recover(snapshot: Snapshot): Promise<void>;
-}
-```
-
-### Toolkit Integration Protocol
-
-```typescript
-interface ToolkitProvider {
-  readonly capabilities: string[];
-  connect(config: ToolkitConfig): Promise<void>;
-  execute(action: Action): Promise<Response>;
-  validateHealth(): Promise<HealthStatus>;
-}
-```
-
----
-
 ## Expanded Toolkit Safety Matrix
 
 | **Toolkit**         | **Retry Policy** | **Fallback**         | **Timeout** |
@@ -237,9 +243,13 @@ interface ToolkitProvider {
 ## Review
 
 ✅ **Enhanced Edge-Readiness:** Supports **dynamic model quantization, zero-knowledge proofs, and trusted execution environments** for increased security and performance.  
+
 ✅ **Scalable & Modular:** Introduces **Mixtral, OCR, ASR support** and **policy-based automation** for AI agents.  
+
 ✅ **Optimized DevOps Pipeline:** Adds **Kubernetes-based microservices and federated learning support**.  
+
 ✅ **Real-World Failover & Compliance:** Legal sandboxing, GDPR protections, and audit trails ensure **enterprise-grade resilience**.  
+
 ⚡ **Final Rating: 10/10** – Fully optimized for industrial, compliance-heavy, and edge AI use cases. 🚀
 
 ---

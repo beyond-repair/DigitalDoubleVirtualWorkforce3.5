@@ -1,31 +1,25 @@
-# Contributor Guidelines
+# Contributing Guidelines
 
 ## Overview
-Welcome to the Digital Double Virtual Workforce project! This document outlines the guidelines for contributing to the project, including workflows, naming conventions, and integration protocols.
+Welcome to the Digital Double Virtual Workforce project! Please review our development guidelines in `src/core/# Development Guidelines.md` for detailed technical requirements.
 
-## Workflows
-1. **Branching Strategy**: 
-   - Use Git worktrees or dedicated feature branches for isolating features and fixes.
-   - Ensure that branches are named descriptively, e.g., `feature/add-new-module`.
+## Quick Start
+1. Fork the repository
+2. Follow the branching strategy from guidelines
+3. Make atomic commits with semantic messages
+4. Submit PR with completed documentation
 
-2. **Commit Messages**: 
-   - Commit changes in small, atomic increments.
-   - Use clear and descriptive messages that tie directly to project objectives.
+## Commit Messages
+Format: `<type>(<scope>): <subject>`
 
-3. **Tagging Milestones**: 
-   - Tag major milestones to track significant progress points.
-
-## Naming Conventions
-- Use a structured naming convention for files and submodules to improve clarity and scalability.
-- Example: `core/[module]/[submodule].ext`
-
-## Integration Protocols
-- Ensure that all code is tested before merging into the main branch.
-- Conduct periodic scope reviews to align incremental progress with project goals.
-
-## Documentation
-- Use `document.md` as the central hub for updates, documenting key decisions, changes, and progress.
-- Update this `CONTRIBUTING.md` file as necessary to reflect any changes in guidelines.
+Types:
+- feat: New feature
+- fix: Bug fix
+- docs: Documentation
+- test: Adding tests
+- refactor: Code refactoring
+- style: Formatting
+- chore: Maintenance
 
 ## Contact
-For any questions or clarifications, please reach out to the project maintainers.
+For questions, reach out to project maintainers through Issues or Discussions.

@@ -2,7 +2,7 @@ import { IResourceMonitor, IResourceMetrics } from '../interfaces/monitor.interf
 
 export class ResourceMonitorService implements IResourceMonitor {
   private metrics: IResourceMetrics[] = [];
-  private monitoringInterval?: NodeJS.Timer;
+  private monitoringInterval?: NodeJS.Timeout;
   private readonly INTERVAL_MS = 1000;
   private readonly MAX_HISTORY = 3600; // 1 hour of history
 

@@ -3,7 +3,7 @@ import { ICommunicationHandler, IMessage, MessageType } from '../interfaces/comm
 export class CommunicationService implements ICommunicationHandler {
   private handlers: Map<MessageType, ((message: IMessage) => Promise<void>)[]> = new Map();
   private readonly HEARTBEAT_INTERVAL = 30000;
-  private heartbeatTimer?: NodeJS.Timer;
+  private heartbeatTimer?: NodeJS.Timeout;
 
   constructor(private agentId: string) {
     this.startHeartbeat();
@@ -46,7 +46,7 @@ export class CommunicationService implements ICommunicationHandler {
 
   shutdown(): void {
     if (this.heartbeatTimer) {
-      clearInterval(this.heartbeatTimer);
+      clearTimeout(this.heartbeatTimer as NodeJS.Timeout);
     }
   }
 }

@@ -1,4 +1,11 @@
 import { Server } from 'http';
-// ...existing code...
-private server: Server;
-// ...existing code...
+
+class YourClassName {
+    private server: Server;
+
+    constructor() {
+        this.server = new Server(); // Initialize the server property
+    }
+
+    // ...existing code...
+}

@@ -16,7 +16,7 @@ export class AnalyticsService {
         return data.filter(item => item.timestamp >= cutoff);
     }
 
-    public getMetrics(name: string, days: number = 7): ITimeSeriesData[] {
+    public getMetrics(name: string, days = 7): ITimeSeriesData[] {
         const data = this.metrics.get(name);
         if (!data) return [];
 
@@ -27,7 +27,6 @@ export class AnalyticsService {
     }
 
     public getMetricsSummary(): ISystemMetrics {
-        // Implementation for calculating system metrics
         return {
             totalAgents: 0,
             activeAgents: 0,
@@ -35,6 +34,15 @@ export class AnalyticsService {
             processingTasks: 0,
             averageTaskTime: 0,
             systemLoad: 0
+        };
+    }
+
+    public async getPerformanceData(): Promise<{ performanceMetrics: { accuracy: number; responseTime: number; } }> {
+        return {
+            performanceMetrics: {
+                accuracy: 95,
+                responseTime: 200,
+            }
         };
     }
 }

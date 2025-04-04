@@ -1,58 +1,40 @@
-# Git Commit Message Hook
+# Digital Double Virtual Workforce 3.5
 
-This repository contains a Git hook setup that enforces commit message standards to maintain consistent and meaningful commit history.
+Industrial-grade AI agent framework optimized for edge deployment.
 
-## Features
+<div align="center">
 
-- Prevents empty commit messages
-- Enforces a minimum commit message length of 10 characters
-- Validates commit messages through a pre-commit hook
+![Build Status](https://img.shields.io/github/workflow/status/digital-double/virtual-workforce/CI)
+![Version](https://img.shields.io/badge/version-3.5.0-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-## Setup
+</div>
 
-1. The hook is located in `.git/hooks/commit-msg`
+## ✨ Features
+- Hardware-aware model quantization
+- Zero-knowledge proof security
+- Edge-first architecture
+- Offline capability
+- Enterprise compliance
 
-2. Make sure the hook is executable:
-
-   ```bash
-   chmod +x .git/hooks/commit-msg
-   ```
-
-3. The hook is automatically triggered when you make a commit
-
-## Configuration
-
-The repository uses the following Git configuration (in `.gitconfig`):
-
-```properties
-[core]
-    editor = "C:\\Users\\willi\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe" --wait
-[commit]
-    template = .gitmessage
-[hook]
-    validatecommit = true
+## 🚀 Quick Start
+```bash
+git clone https://github.com/digital-double/virtual-workforce
+cd virtual-workforce
+npm install
+npm test
 ```
 
-## Commit Message Rules
+## 📖 Documentation
+- [Full Documentation](document.md)
+- [API Reference](docs/api.md)
+- [Contributing](CONTRIBUTING.md)
 
-1. Commit messages cannot be empty
+## 🔧 Requirements
+- Node.js 18+
+- Python 3.9+
+- 2GB RAM
+- GPU (optional)
 
-2. Commit messages must be at least 10 characters long
-
-3. The hook will reject commits that don't meet these criteria
-
-## Troubleshooting
-
-If you encounter fork-related errors on Windows:
-
-- Use Git Bash instead of CMD
-
-- Check system resources
-
-- Verify antivirus isn't blocking hook execution
-
-- Ensure proper line endings (LF, not CRLF)
-
-## Contributing
-
-When contributing to this repository, please ensure your commit messages follow the above guidelines.
+## 📝 License
+[MIT](LICENSE)

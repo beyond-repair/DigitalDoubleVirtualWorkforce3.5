@@ -6,7 +6,8 @@ describe('Agent', () => {
   beforeEach(() => {
     agent = new Agent({
       name: 'test-agent',
-      capabilities: ['test']
+      version: '1.0.0', // Add missing required version property
+      capabilities: [] // Added missing capabilities property
     });
   });
 

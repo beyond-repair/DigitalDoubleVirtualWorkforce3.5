@@ -1,40 +1,19 @@
-import unittest
-import sys
-import importlib
-from pathlib import Path
-import subprocess
+import os
+import pytest
 
-# Add project root, src/python, and models directory to path
-sys.path.insert(0, str(Path(__file__).parent.parent))
 
-# Add src/python to path
-sys.path.insert(0, str(Path(__file__).parent.parent / 'src' / 'python'))
+def main():
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(script_dir)
 
-# Add models directory to path
-sys.path.insert(0, str(Path(__file__).parent.parent / 'src' / 'python' / 'core' / 'models'))
+    python_src = os.path.join(project_root, 'src', 'python')
+    test_path = os.path.join(python_src, 'tests')
 
-# Import test file using full path
-test_path = Path(__file__).parent.parent / 'src' / 'python' / 'tests' / 'test_agent.py'
+    exit_code = pytest.main([test_path, '-v'])
+    return exit_code
 
-spec = importlib.util.spec_from_file_location("test_agent", test_path)
-test_agent = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(test_agent)
 
-# Create test suite and run
-suite = unittest.TestLoader().loadTestsFromModule(test_agent)
-result = unittest.TextTestRunner().run(suite)
+if __name__ == '__main__':
+    exit(main())
 
-command = (
-    "python -m pytest "
-    "--maxfail=1 "
-    "--disable-warnings"
-)
-subprocess.run(command, shell=True)
 
-another_command = (
-    "flake8 --exclude=venv,build,dist "
-    "--max-line-length=79"
-)
-subprocess.run(another_command, shell=True)
-
-sys.exit(0 if result.wasSuccessful() else 1)

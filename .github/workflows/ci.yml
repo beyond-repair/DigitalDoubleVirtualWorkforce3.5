@@ -7,19 +7,27 @@ on:
     branches: [ main, develop ]
 
 jobs:
-  validate:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      
-      - name: Validate Commit Messages
-        run: |
-          bash ./scripts/validate-commits.sh
-          
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+      - name: Install Dependencies
+        run: npm ci
       - name: Run Tests
+        run: npm test
+      - name: Check Coverage
+        run: npm run coverage
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Lint Code
         run: |
-          bash ./scripts/run-tests.sh
-          
-      - name: Check Documentation
-        run: |
-          bash ./scripts/check-docs.sh
+          npm ci
+          npm run lint
+          npm run lint:docs

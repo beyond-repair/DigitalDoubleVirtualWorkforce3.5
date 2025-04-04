@@ -35,4 +35,11 @@ export class BillingService {
             }
         });
     }
+
+    public getUsage(customerId: string): IUsageMetrics {
+        const billing = this.customerBilling.get(customerId);
+        if (!billing) throw new Error('Customer not found');
+        return billing.currentUsage;
+    }
+
 }

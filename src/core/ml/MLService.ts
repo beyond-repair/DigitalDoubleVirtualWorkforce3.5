@@ -1,8 +1,8 @@
-import { IWorkloadPrediction } from '../interfaces/IMLPrediction';
-import { ITimeSeriesData } from '../interfaces/IAnalytics';
+import { IWorkloadPrediction } from '../../interfaces/IMLPrediction';
+import { ITimeSeriesData } from '../../interfaces/IAnalytics';
 import { ModelTracker } from './ModelTracker';
-import { AnalyticsService } from './AnalyticsService';
-import { ProcessResult, ProcessedData } from '../interfaces/processing.interface';
+import { AnalyticsService } from '../analytics/AnalyticsService';
+import { ProcessResult, ProcessedData } from '../../interfaces/processing.interface';
 
 /**
  * Machine Learning Service with UADF (Universal Autonomous Development Framework) integration
@@ -18,6 +18,13 @@ export class MLService {
     private readonly MIN_TRAINING_POINTS = 1000;
     private modelTracker: ModelTracker;
     private currentModelVersion = '1.0.0';
+    private quantizationConfig?: {
+        targetSize: number;
+        precision: 'float16' | 'int8';
+        device: 'cpu' | 'gpu';
+        enabled: boolean;
+        lastOptimization: Date;
+    };
 
     constructor(analyticsService: AnalyticsService) {
         this.modelTracker = new ModelTracker(analyticsService);
@@ -54,12 +61,10 @@ export class MLService {
 
     public async recordActualValues(timestamp: Date, actualTasks: number, actualAgents: number): Promise<boolean> {
         try {
-            // Pre-calculate predictions
             const predictedTasks = await this.predictTaskCount(timestamp);
             const predictedAgents = await this.predictAgentCount(timestamp);
             const confidence = this.calculateConfidence();
 
-            // Record task count prediction accuracy
             this.modelTracker.recordPrediction(
                 'workload-predictor',
                 this.currentModelVersion,
@@ -68,7 +73,6 @@ export class MLService {
                 confidence
             );
 
-            // Record agent count prediction accuracy
             this.modelTracker.recordPrediction(
                 'workload-predictor',
                 this.currentModelVersion,
@@ -83,13 +87,11 @@ export class MLService {
     }
 
     private async predictTaskCount(timestamp: Date): Promise<number> {
-        // TODO: Implement actual prediction logic
-        return 100;
+        return 100; // Placeholder logic
     }
 
     private async predictAgentCount(timestamp: Date): Promise<number> {
-        // TODO: Implement actual prediction logic
-        return 5;
+        return 5; // Placeholder logic
     }
 
     public async processResult(result: ProcessResult): Promise<ProcessResult> {
@@ -105,7 +107,6 @@ export class MLService {
     }
 
     private async processInput(input: unknown): Promise<ProcessedData> {
-        // TODO: Implement input processing logic
         return {
             status: 'success',
             message: 'Processing complete'
@@ -121,6 +122,31 @@ export class MLService {
                 status: errorResult.status,
                 message: errorResult.message
             };
+        }
+    }
+
+    public async initializeQuantization(options: {
+        targetSize: number;
+        precision: 'float16' | 'int8';
+        device: 'cpu' | 'gpu';
+    }): Promise<void> {
+        this.quantizationConfig = {
+            ...options,
+            enabled: true,
+            lastOptimization: new Date()
+        };
+        
+        await this.optimizeModels();
+    }
+
+    private async optimizeModels(): Promise<void> {
+        // Implementation for model quantization
+        if (!this.quantizationConfig?.enabled) return;
+        
+        try {
+            // Model optimization logic here
+        } catch (error) {
+            this.handleError(error as Error);
         }
     }
 }

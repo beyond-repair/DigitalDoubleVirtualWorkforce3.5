@@ -18,6 +18,16 @@ export class BillingController {
         this.router.get('/usage/:customerId', this.getUsage.bind(this));
     }
 
+    private async getUsage(req: Request, res: Response): Promise<void> {
+        const { customerId } = req.params;
+        try {
+            const usageData = await this.billingService.getUsage(customerId); // Assuming this method exists in BillingService
+            res.json(usageData);
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to retrieve usage data' });
+        }
+    }
+
     private async subscribe(req: Request, res: Response): Promise<void> {
         try {
             const { customerId, tier } = req.body;

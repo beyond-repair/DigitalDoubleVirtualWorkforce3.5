@@ -2,7 +2,9 @@ import torch
 import logging
 from dataclasses import dataclass
 from enum import Enum, auto
+from typing import Dict, Optional
 
+from . import MODEL_CONFIGS, CALIBRATION_CONFIGS
 
 class QuantizationMode(Enum):
     """Supported quantization modes"""
@@ -16,6 +18,11 @@ class QuantizationConfig:
     mode: QuantizationMode = QuantizationMode.DYNAMIC
     bits: int = 8
     min_ram_mb: int = 512  # Minimum RAM required for full precision
+    model_name: Optional[str] = None
+
+    def __post_init__(self):
+        if self.model_name and self.model_name in MODEL_CONFIGS:
+            self.bits = MODEL_CONFIGS[self.model_name]["default_quantization"]
 
 class ModelQuantizer:
     """Handles dynamic model quantization based on system constraints"""

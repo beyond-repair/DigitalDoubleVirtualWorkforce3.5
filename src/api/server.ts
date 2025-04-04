@@ -3,8 +3,18 @@ import cors from 'cors';
 import helmet from 'helmet';
 import { createApiRoutes } from './routes/api.routes';
 import { AgentController } from './controllers/agent.controller';
-import { IApiConfig } from './interfaces/api.interface';
 import { AgentService } from '../core/services/agent.service';
+
+interface Logger {
+  error(message: string, ...args: any[]): void;
+  info(message: string, ...args: any[]): void;
+}
+
+export interface IApiConfig {
+  port: number;
+  corsOrigins: string | string[];
+  logger: Logger;
+}
 
 export class ApiServer {
   private app = express();
@@ -20,6 +30,12 @@ export class ApiServer {
     this.app.use(helmet());
     this.app.use(cors({ origin: this.config.corsOrigins }));
     this.app.use(express.json());
+    
+    // Global error handler
+    this.app.use((error: Error, req: express.Request, res: express.Response, _next: express.NextFunction) => {
+      this.config.logger.error('Server error:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    });
   }
 
   private setupRoutes(): void {
@@ -28,21 +44,22 @@ export class ApiServer {
   }
 
   start(): void {
-    this.server = this.app.listen(this.config.port, (err?: Error) => {
-      if (err) {
-        // Log error using a proper logger instead of console.log
-        // logger.error(err);
-        return;
-      }
+    this.server = this.app.listen(this.config.port, () => {
       // logger.info(`API server running on port ${this.config.port}`);
     });
+
+    // Attach error handler to the server instance
+    if (this.server) {
+      this.server.on('error', (err: Error) => { // Correct signature for http.Server error
+        // logger.error('Server error:', err);
+      });
+    }
   }
 
   shutdown(): void {
     if (this.server) {
-      this.server.close((err: Error) => {
+      this.server.close((err?: Error) => {
         if (err) {
-          // Log error using a proper logger instead of console.error
           // logger.error('Error closing server:', err);
         }
       });
