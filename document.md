@@ -44,6 +44,7 @@ src/
 - [ ] CI/CD: Configuration pending
 - [x] Notification Service: Initial implementation with tests
   - Integrated Socket.IO for real-time event emission.
+  - Added user preference management (realtime toggle, disabled types).
 
 ### Immediate Tasks
 1. **Build modular notification system** (Current Focus)
