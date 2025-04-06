@@ -29,38 +29,66 @@ modules/
 
 #### Purpose
 
-This file provides an example module structure and functionality, specifically demonstrating a simple `TaskManager` class for managing a list of tasks.
+Implements the `TaskManager` class, a core module for managing the lifecycle of complex task objects within the virtual workforce system.
 
 #### Class: `TaskManager`
 
--   **Purpose**: Manages a list of tasks (strings).
--   **Exported**: Yes
+- **Purpose:** Create, retrieve, assign, update, and remove structured task objects.
+- **Exported:** Yes
 
 ##### Attributes
 
--   **`tasks: string[]`** (Private, Line 7): An array to store the task strings. Initialized as an empty array in the constructor.
+- **`tasks: ITask[]`** (Private): Array of task objects conforming to `ITask` interface, initialized empty.
 
 ##### Methods
 
--   **`constructor()`** (Lines 12-14)
-    -   **Purpose**: Initializes a new instance of the `TaskManager`.
-    -   **Logic**: Sets the private `tasks` attribute to an empty array.
--   **`addTask(task: string): void`** (Lines 20-22)
-    -   **Purpose**: Adds a new task string to the internal list.
-    -   **Parameters**:
-        -   `task: string`: The task description to add.
-    -   **Returns**: `void`.
-    -   **Logic**: Uses the `push` method to add the `task` to the `this.tasks` array.
--   **`getTasks(): string[]`** (Lines 28-30)
-    -   **Purpose**: Retrieves the current list of all tasks.
-    -   **Parameters**: None.
-    -   **Returns**: `string[]`: A copy of the internal `tasks` array.
-    -   **Logic**: Returns the `this.tasks` array.
--   **`clearTasks(): void`** (Lines 35-37)
-    -   **Purpose**: Removes all tasks from the list.
-    -   **Parameters**: None.
-    -   **Returns**: `void`.
-    -   **Logic**: Resets the `this.tasks` array to an empty array.
+- **`constructor()`**
+  - Initializes an empty task list.
+- **`createTask(data: unknown, priority: TaskPriority = TaskPriority.MEDIUM): ITask`**
+  - Creates a new task with unique ID, timestamps, priority, and payload.
+- **`getTasks(): ITask[]`**
+  - Retrieves all tasks.
+- **`getTaskById(id: string): ITask | undefined`**
+  - Fetches a task by its unique ID.
+- **`getTasksByStatus(status: TaskStatus): ITask[]`**
+  - Filters tasks by their status.
+- **`updateTaskStatus(id: string, status: TaskStatus): boolean`**
+  - Updates the status of a task, returns success flag.
+- **`assignTask(id: string, agentId: string): boolean`**
+  - Assigns a task to an agent, updates status to `ASSIGNED`.
+- **`removeTask(id: string): boolean`**
+  - Removes a task by ID.
+- **`clearTasks(): void`**
+  - Clears all tasks.
+- **`generateUniqueId(): string`** (private)
+  - Generates a unique identifier string.
+
+##### Data Model
+
+- **`ITask` interface** (see `src/interfaces/ITask.ts`)
+  - `id: string`
+  - `priority: TaskPriority`
+  - `status: TaskStatus`
+  - `data: unknown`
+  - `assignedAgent?: string`
+  - `createdAt: Date`
+  - `updatedAt: Date`
+
+##### Enums
+
+- **`TaskPriority`**: LOW, MEDIUM, HIGH, CRITICAL
+- **`TaskStatus`**: PENDING, ASSIGNED, RUNNING, COMPLETED, FAILED
+
+##### Testing
+
+- Fully covered by `tests/modules/TaskManager.test.ts` with >90% coverage.
+- Tests include creation, retrieval, status updates, assignment, removal, and clearing.
+
+##### Integration Notes
+
+- Designed to be integrated with agent lifecycle and scheduling components.
+- Extendable by modifying `ITask` interface.
+- Emits no side effects; pure in-memory management.
 
 ### File: `README.md`
 
