@@ -38,6 +38,54 @@ src/
 6. Submit PR with changelog
 
 ### Current Module Status
+
+## Module: MLService
+
+### Purpose
+Provides machine learning capabilities including workload prediction, self-learning, model versioning, and dynamic quantization optimized for edge deployment.
+
+### Location
+- Implementation: `src/core/ml/MLService.ts`
+- Interfaces: `src/interfaces/IMLPrediction.ts`, `src/interfaces/IAnalytics.ts`
+- Tests: `src/core/__tests__/MLService.test.ts`
+
+### Key Features
+- Predicts workload and agent requirements over a time horizon.
+- Tracks prediction accuracy and adjusts confidence dynamically.
+- Maintains model version history and performance metrics.
+- Handles errors gracefully with fallback mechanisms.
+- Supports **dynamic model quantization** with:
+  - Hardware-aware scaling (aggressive on GPU, conservative on CPU).
+  - Automatic fallback to unquantized model on failure.
+  - Monitoring of quantization success/failure and timestamps.
+  - Configurable precision (`float16` or `int8`) and target size.
+- Modular design for easy extension.
+
+### API Overview
+```typescript
+const mlService = new MLService(analyticsService);
+
+// Initialize quantization
+await mlService.initializeQuantization({
+  targetSize: 1024,
+  precision: 'float16',
+  device: 'cpu' // or 'gpu'
+});
+
+// Make workload predictions
+const predictions = await mlService.predictWorkload(24);
+
+// Record actual values for self-learning
+await mlService.recordActualValues(new Date(), 120, 6);
+```
+
+### Contributor Guidance
+- Extend quantization logic in `optimizeModels()` as needed.
+- Replace `simulateQuantization()` with real quantization library calls.
+- Maintain atomic commits tied to specific ML features.
+- Update this documentation with any API or design changes.
+- Ensure tests cover quantization workflows and fallback logic.
+
 ## Module: TaskManager
 
 ### Purpose

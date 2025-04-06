@@ -140,13 +140,53 @@ export class MLService {
     }
 
     private async optimizeModels(): Promise<void> {
-        // Implementation for model quantization
         if (!this.quantizationConfig?.enabled) return;
-        
+
         try {
-            // Model optimization logic here
+            // Hardware-aware scaling
+            if (this.quantizationConfig.device === 'gpu') {
+                // Use aggressive quantization on GPU
+                this.quantizationConfig.precision = 'int8';
+                this.quantizationConfig.targetSize = Math.floor(this.quantizationConfig.targetSize * 0.5);
+            } else {
+                // Conservative quantization on CPU
+                this.quantizationConfig.precision = 'float16';
+            }
+
+            // Simulate quantization process
+            const success = await this.simulateQuantization();
+
+            if (!success) {
+                // Fallback: disable quantization
+                this.quantizationConfig.enabled = false;
+                console.warn('Quantization failed, reverting to unquantized model.');
+            } else {
+                console.log('Quantization successful with config:', this.quantizationConfig);
+                this.quantizationConfig.lastOptimization = new Date();
+            }
         } catch (error) {
-            this.handleError(error as Error);
+            console.error('Quantization error:', error);
+            this.quantizationConfig.enabled = false; // Fallback
+            await this.handleError(error as Error);
+        }
+    }
+
+    /**
+     * Simulates the quantization process.
+     * Replace with actual quantization logic or library calls.
+     */
+    private async simulateQuantization(): Promise<boolean> {
+        try {
+            // Placeholder: randomly succeed or fail
+            const rand = Math.random();
+            if (rand < 0.8) {
+                // 80% chance of success
+                return true;
+            } else {
+                throw new Error('Simulated quantization failure');
+            }
+        } catch {
+            return false;
         }
     }
 }
