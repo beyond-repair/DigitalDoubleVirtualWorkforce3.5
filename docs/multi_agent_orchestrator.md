@@ -8,8 +8,13 @@ This system implements a multi-agent orchestration framework with autonomous age
 ## Architecture
 
 ### Components
-- **MultiAgentOrchestrator**: Core orchestrator managing agent registry, message routing, fallback, and optimization.
+
+- **MultiAgentOrchestrator**: Core orchestrator coordinating all components, managing Redis pub/sub, startup, and shutdown.
 - **AgentRegistry**: Maintains a mapping of agent names to callable functions.
+- **MessageRouter**: Handles message dispatching, error handling, and fallback routing.
+- **PluginAdapterManager**: Provides unified access to plugin adapters (Docker, Git, CI/CD, API, System Control).
+- **TaskOptimizer**: Placeholder for adaptive subtask decomposition and workflow optimization.
+- **ErrorManager**: Centralized error handling, escalation, and retry management.
 - **Agents**:
   - **Planner**: Decomposes goals into subtasks.
   - **Coder**: Generates code based on task descriptions.
@@ -100,10 +105,10 @@ The orchestrator will:
 ## Extending the System
 
 - **Add new agents**: Implement a function and register it.
-- **Improve fallback**: Add retries or alternative agent logic.
-- **Enhance optimization**: Implement smarter subtask decomposition.
+- **Improve fallback**: Extend `ErrorManager` with retries, escalation, or alternative routing.
+- **Enhance optimization**: Implement smarter subtask decomposition in `TaskOptimizer`.
 - **Integrate persistent memory**: Connect to databases or vector stores.
-- **Add plugin adapters**: For Docker, Git, CI/CD, APIs.
+- **Leverage plugin adapters**: Use `PluginAdapterManager` to invoke Docker, Git, CI/CD, API, or system control plugins dynamically.
 - **Visualize workflows**: Extend the frontend UI components.
 
 ---
