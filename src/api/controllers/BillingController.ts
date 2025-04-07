@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { BillingService } from '../../core/BillingService';
 import { validateApiKey } from '../middleware/auth';
-import { createPayment } from '../../modules/payment/paypalService';
+/* import { createPayment } from '../../modules/payment/paypalService'; */
 
 export class BillingController {
     private router = Router();

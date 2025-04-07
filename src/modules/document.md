@@ -1,107 +1,92 @@
-# Directory: src/modules
+# Modules - Digital Double Virtual Workforce 3.5
 
-This folder contains the core modules for the Digital Double Virtual Workforce project. Each module encapsulates specific functionalities.
+---
+
+## Overview
+
+The `src/modules/` directory contains modular components that extend the core capabilities of the Digital Double Virtual Workforce 3.5. These modules enable integration with external tools, services, and APIs, as well as specialized functionalities like ML and payment processing.
+
+---
 
 ## Directory Structure
 
 ```
 modules/
-├── exampleModule.ts
-├── README.md             (Existing README, content incorporated below)
-├── document.md           (This file)
+├── exampleModule.ts            # Task management example
 ├── lead_ai/
-│   ├── ml_service.py
-│   └── document.md       (Detailed documentation for lead_ai module)
-└── payment/
-    ├── paypalService.d.ts
-    ├── paypalService.js
-    └── document.md       (Detailed documentation for payment module)
+│   ├── ml_service.py           # ML service (legacy)
+│   └── document.md             # ML module documentation
+├── payment/
+│   ├── paypalService.d.ts
+│   ├── paypalService.js
+│   └── document.md             # Payment module documentation
+├── plugin_integration/
+│   ├── DockerAdapter.ts
+│   ├── GitAdapter.ts
+│   ├── CICDAdapter.ts
+│   ├── APIAdapter.ts
 ```
 
-## Guidelines (from README.md)
+---
 
--   Each module should be self-contained and well-documented.
--   Follow the project's coding and documentation standards.
+## Module Summaries
 
-## Top-Level Files
+### Task Management Module (`exampleModule.ts`)
+- Implements `TaskManager` class.
+- Manages lifecycle of complex task objects.
+- Fully covered by tests.
+- Integrates with agent orchestration.
 
-### File: `exampleModule.ts`
+### Lead AI Module (`lead_ai/`)
+- Provides ML services for workload prediction and analytics.
+- Legacy Python implementation; migrating to TypeScript core.
+- Integrates with `ModelTracker` and `MLService`.
 
-#### Purpose
+### Payment Module (`payment/`)
+- Integrates with PayPal REST API.
+- Handles payment creation and management.
+- Provides type definitions and async API.
+- Extensible for other payment providers.
 
-Implements the `TaskManager` class, a core module for managing the lifecycle of complex task objects within the virtual workforce system.
+### Plugin Integration Modules (`plugin_integration/`)
+- **DockerAdapter:** Manage containers, images, networks.
+- **GitAdapter:** Clone, commit, push, pull repositories.
+- **CICDAdapter:** Trigger builds, deployments, monitor pipelines.
+- **APIAdapter:** Connect to arbitrary REST APIs.
+- Event-driven, async, and secure.
+- Extensible for new plugins (Zapier, custom APIs).
 
-#### Class: `TaskManager`
+---
 
-- **Purpose:** Create, retrieve, assign, update, and remove structured task objects.
-- **Exported:** Yes
+## Design Principles
 
-##### Attributes
+- **Modularity:** Each module is self-contained and well-documented.
+- **Extensibility:** Easily add new modules or extend existing ones.
+- **Security:** Enforce RBAC, audit logs, and allowlists.
+- **Event-Driven:** Use Redis pub/sub for decoupled workflows.
+- **Async APIs:** Support non-blocking operations.
 
-- **`tasks: ITask[]`** (Private): Array of task objects conforming to `ITask` interface, initialized empty.
+---
 
-##### Methods
+## Cross-References
 
-- **`constructor()`**
-  - Initializes an empty task list.
-- **`createTask(data: unknown, priority: TaskPriority = TaskPriority.MEDIUM): ITask`**
-  - Creates a new task with unique ID, timestamps, priority, and payload.
-- **`getTasks(): ITask[]`**
-  - Retrieves all tasks.
-- **`getTaskById(id: string): ITask | undefined`**
-  - Fetches a task by its unique ID.
-- **`getTasksByStatus(status: TaskStatus): ITask[]`**
-  - Filters tasks by their status.
-- **`updateTaskStatus(id: string, status: TaskStatus): boolean`**
-  - Updates the status of a task, returns success flag.
-- **`assignTask(id: string, agentId: string): boolean`**
-  - Assigns a task to an agent, updates status to `ASSIGNED`.
-- **`removeTask(id: string): boolean`**
-  - Removes a task by ID.
-- **`clearTasks(): void`**
-  - Clears all tasks.
-- **`generateUniqueId(): string`** (private)
-  - Generates a unique identifier string.
+- **Core Architecture:** See [../document.md](../../document.md)
+- **Plugin Adapters:** See [../../docs/plugin_adapters.md](../../docs/plugin_adapters.md)
+- **System Architecture:** See [../../docs/system_architecture.md](../../docs/system_architecture.md)
 
-##### Data Model
+---
 
-- **`ITask` interface** (see `src/interfaces/ITask.ts`)
-  - `id: string`
-  - `priority: TaskPriority`
-  - `status: TaskStatus`
-  - `data: unknown`
-  - `assignedAgent?: string`
-  - `createdAt: Date`
-  - `updatedAt: Date`
+## Guidelines
 
-##### Enums
+- Follow project coding and documentation standards.
+- Update module docs alongside code changes.
+- Write unit and integration tests for all modules.
+- Use async patterns and error handling best practices.
 
-- **`TaskPriority`**: LOW, MEDIUM, HIGH, CRITICAL
-- **`TaskStatus`**: PENDING, ASSIGNED, RUNNING, COMPLETED, FAILED
+---
 
-##### Testing
+## Summary
 
-- Fully covered by `tests/modules/TaskManager.test.ts` with >90% coverage.
-- Tests include creation, retrieval, status updates, assignment, removal, and clearing.
+Modules extend the Digital Double Virtual Workforce 3.5 with specialized, secure, and extensible capabilities, enabling seamless integration with external tools, ML services, and payment systems within autonomous workflows.
 
-##### Integration Notes
-
-- Designed to be integrated with agent lifecycle and scheduling components.
-- Extendable by modifying `ITask` interface.
-- Emits no side effects; pure in-memory management.
-
-### File: `README.md`
-
--   **Purpose**: Provides a brief overview and guidelines for the modules directory. Its content has been incorporated into this `document.md` file.
-
-## Sub-Modules
-
-### Module: `lead_ai`
-
--   **Purpose**: Focuses on machine learning capabilities related to lead generation or management.
--   **Documentation**: See [./lead_ai/document.md](./lead_ai/document.md)
-
-### Module: `payment`
-
--   **Purpose**: Handles payment processing, specifically integrating with PayPal.
--   **Documentation**: See [./payment/document.md](./payment/document.md)
+---

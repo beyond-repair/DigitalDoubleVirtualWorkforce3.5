@@ -34,7 +34,7 @@ describe('TaskExecutionAgent', () => {
     it('should handle task failures', async () => {
         const agent = new TaskExecutionAgent(mockConfig);
         const failingToolkit = new MockToolkit();
-        failingToolkit.execute = async () => { throw new Error('Task failed'); };
+        failingToolkit.execute = async (): Promise<never> => { throw new Error('Task failed'); };
         
         await agent.registerToolkit(failingToolkit);
 
@@ -48,6 +48,7 @@ describe('TaskExecutionAgent', () => {
 
         await expect(agent.executeTask(task)).rejects.toThrow('Task failed');
         const result = agent.getTaskResult(task.id);
+        console.log('Retrieved result after failure:', result);
 
         expect(result?.success).toBe(false);
         expect(result?.error).toBeDefined();

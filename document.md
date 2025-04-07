@@ -1,227 +1,155 @@
-# Digital Double Virtual Workforce 3.5
-
-## Project Overview
-
-Edge-ready AI agent framework optimized for industrial deployment.
-- Version: 3.5.0
-- Status: Active Development
-- Repository: github.com/digital-double/virtual-workforce
-
-## Development Guidelines
-
-### File Structure
-```
-src/
-  ├── core/           # Core system components
-  │   ├── agent/     # Agent implementation
-  │   ├── ml/        # Machine learning modules
-  │   └── utils/     # Shared utilities
-  ├── modules/       # Feature modules
-  └── interfaces/    # Type definitions
-```
-
-### Version Control
-- Branch Format: `<type>/<module>/<description>`
-  - feature/ml/quantization
-  - bugfix/agent/memory-leak
-- Commit Format: `<type>(<scope>): <subject>`
-  - feat(ml): implement dynamic quantization
-  - fix(agent): resolve memory leak
-- Release Tags: `v[X.Y.Z]`
-
-### Development Workflow
-1. Document changes in document.md
-2. Create feature branch
-3. Implement tests (90% coverage)
-4. Write code following standards
-5. Update documentation
-6. Submit PR with changelog
-
-### Current Module Status
-
-## Module: MLService
-
-### Purpose
-Provides machine learning capabilities including workload prediction, self-learning, model versioning, and dynamic quantization optimized for edge deployment.
-
-### Location
-- Implementation: `src/core/ml/MLService.ts`
-- Interfaces: `src/interfaces/IMLPrediction.ts`, `src/interfaces/IAnalytics.ts`
-- Tests: `src/core/__tests__/MLService.test.ts`
-
-### Key Features
-- Predicts workload and agent requirements over a time horizon.
-- Tracks prediction accuracy and adjusts confidence dynamically.
-- Maintains model version history and performance metrics.
-- Handles errors gracefully with fallback mechanisms.
-- Supports **dynamic model quantization** with:
-  - Hardware-aware scaling (aggressive on GPU, conservative on CPU).
-  - Automatic fallback to unquantized model on failure.
-  - Monitoring of quantization success/failure and timestamps.
-  - Configurable precision (`float16` or `int8`) and target size.
-- Modular design for easy extension.
-
-### API Overview
-```typescript
-const mlService = new MLService(analyticsService);
-
-// Initialize quantization
-await mlService.initializeQuantization({
-  targetSize: 1024,
-  precision: 'float16',
-  device: 'cpu' // or 'gpu'
-});
-
-// Make workload predictions
-const predictions = await mlService.predictWorkload(24);
-
-// Record actual values for self-learning
-await mlService.recordActualValues(new Date(), 120, 6);
-```
-
-### Contributor Guidance
-- Extend quantization logic in `optimizeModels()` as needed.
-- Replace `simulateQuantization()` with real quantization library calls.
-- Maintain atomic commits tied to specific ML features.
-- Update this documentation with any API or design changes.
-- Ensure tests cover quantization workflows and fallback logic.
-
-## Module: TaskManager
-
-### Purpose
-Manages lifecycle of tasks within the virtual workforce, including creation, assignment, status updates, retrieval, and removal.
-
-### Location
-- Implementation: `src/modules/exampleModule.ts`
-- Interface: `src/interfaces/ITask.ts`
-- Tests: `tests/modules/TaskManager.test.ts`
-
-### Key Features
-- Create tasks with unique IDs, priority, and payload
-- Assign tasks to agents
-- Update task status (Pending, Assigned, Running, Completed, Failed)
-- Retrieve tasks (all, by ID, by status)
-- Remove tasks
-- Clear all tasks
-
-### API Overview
-```typescript
-const manager = new TaskManager();
-
-// Create a task
-const task = manager.createTask({ foo: 'bar' }, TaskPriority.HIGH);
-
-// Assign task
-manager.assignTask(task.id, 'agent-123');
-
-// Update status
-manager.updateTaskStatus(task.id, TaskStatus.RUNNING);
-
-// Get tasks
-const allTasks = manager.getTasks();
-const runningTasks = manager.getTasksByStatus(TaskStatus.RUNNING);
-
-// Remove task
-manager.removeTask(task.id);
-
-// Clear all
-manager.clearTasks();
-```
-
-### Design Notes
-- Uses enums `TaskPriority` and `TaskStatus` for clarity and type safety.
-- Stores timestamps (`createdAt`, `updatedAt`) for auditability.
-- Generates unique IDs internally.
-
-### Contributor Guidance
-- Extend `ITask` interface if new metadata is required.
-- Maintain atomic commits tied to specific feature additions or fixes.
-- Update this documentation with any API changes.
-- Ensure tests cover new features with >90% coverage.
+# Digital Double Virtual Workforce 3.5 - Core Documentation
 
 ---
 
-- [x] Project Structure: Reorganized
-- [ ] ML Services: Implementing quantization
-- [ ] Testing: Setting up framework
-- [ ] CI/CD: Configuration pending
+## Overview
 
-### Immediate Tasks
-1. Implement model quantization system
-   - Hardware-aware scaling
-   - Automatic fallback mechanisms
-   - Performance monitoring
-2. Set up testing framework
-   - Unit tests for ML services
-   - Integration tests for agent system
-   - Performance benchmarks
-3. Configure CI/CD pipeline
-   - Automated testing
-   - Code quality checks
-   - Documentation updates
+A fully autonomous, adaptive, multi-agent AI platform with immersive visualization, real-time research, internal IDE, plugin integration, self-healing, and edge-ready deployment.
 
-## Development Standards
+---
 
-### Current Module Status
-- [ ] Core Agent: In Progress
-- [ ] ML Services: Consolidation
-- [ ] Documentation: Updating
-- [ ] Testing: Setup
+## Multi-Agent Orchestration
 
-## Next Task
-"Build dynamic model quantization system with hardware-aware scaling and failover mechanisms. Ensure it is modular, scalable, and optimized for edge deployment."
+- Specialized agents (planner, researcher, coder, messenger, execution, creative, file).
+- Autonomous task generation, prioritization, and scheduling.
+- Multi-step reasoning with chained prompts.
+- Dynamic task decomposition and coordination.
+- Role-based collaboration for complex workflows.
 
-## Weekly Sync Checklist
-- [ ] Module integration status
-- [ ] Test coverage report
-- [ ] Documentation updates
-- [ ] Performance metrics
-- [ ] Compliance verification
-## Pixelated Building UI Module
+---
 
-### Overview
-A modular visualization system to display agents as pixelated avatars within a building metaphor, supporting room layouts and dynamic updates.
+## Plugin Integration
 
-### Components
-- **`src/interfaces/IAgentVisualMetadata.ts`**: Defines visualization metadata (avatar, position, room, UI state).
-- **`src/ui/building/AgentVisualState.ts`**: Singleton state manager for agent visualization metadata with debug logging.
-- **`src/ui/building/BuildingView.ts`**: Renderer that visualizes agents as pixelated divs positioned within a container.
-- **`src/ui/building/RoomLayout.ts`**: Manages room definitions, agent-room assignments, and spatial layout.
+- Event-driven plugin adapters for:
+  - Docker
+  - Git
+  - CI/CD
+  - External APIs
+  - System Control
+  - Zapier (planned)
+- Redis pub/sub communication.
+- Async APIs with secure, auditable execution.
+- Extensible for new tools and services.
 
-### Design Principles
-- Fully modular, each component isolated for maintainability.
-- Extensible to support animations, interactivity, and real-time updates.
-- Decoupled from core agent logic, integrates via metadata/state.
+### Plugin Integration Framework Architecture
 
-### Next Steps
-- Enhance `BuildingView` with Canvas/WebGL rendering.
-- Add interactivity (hover tooltips, selection, drag-and-drop).
-- Integrate with live agent lifecycle events.
-- Expand documentation and contributor guidelines.
+All plugin adapters (Docker, Git, CI/CD, API, etc.) implement a common `IPluginAdapter` interface to ensure modularity, scalability, and maintainability.
 
+**Key Interface Methods:**
+- `initialize()`: Prepare the adapter (auth, client setup).
+- `healthCheck()`: Verify operational status.
+- `shutdown()`: Cleanup resources.
+- Optional: `getStatus()`: Fetch plugin-specific status.
 
-## AgentVisualizerBridge Module
+**Adapter Implementation Guidelines:**
+- Implement all `IPluginAdapter` methods.
+- Use async/await with robust error handling.
+- Log errors and key events with context.
+- Avoid blocking calls; prefer async APIs.
+- Support configuration via constructor or environment.
 
-### Purpose
-A dedicated integration layer that connects the core agent framework with the pixelated building UI, enabling real-time visualization of live agent activity.
+**Adding a New Plugin Adapter:**
+1. Create a new class in `src/modules/plugin_integration/` implementing `IPluginAdapter`.
+2. Implement lifecycle methods and plugin-specific commands.
+3. Add unit tests in `tests/modules/`.
+4. Document usage and API in this file.
+5. Commit changes with descriptive messages.
 
-### Location
-`src/ui/building/AgentVisualizerBridge.ts`
+**Contributor Workflow for Plugin Integration:**
+- Use feature branches or worktrees for new adapters.
+- Write atomic commits tied to specific objectives.
+- Update this documentation with every major change.
+- Tag milestones (e.g., `plugin-integration-v1`).
+- Run all tests and static analysis before merge.
 
-### Responsibilities
-- Subscribe to agent lifecycle events (creation, task assignment, completion, status change).
-- Update visualization metadata (`AgentVisualState`) dynamically.
-- Trigger UI re-renders to reflect live agent behavior.
-- Remain decoupled from both core logic and UI rendering for modularity.
+---
+---
 
-### Design Principles
-- Modular and isolated for maintainability.
-- Extensible to support more event types and richer visualization.
-- Prepared for integration with real agent event emitters.
+## Adaptive Learning & Research
 
-### Next Steps
-- Connect to `AgentService` and `TaskExecutionAgent` event emitters.
-- Replace mock/simulated updates with real-time data.
-- Animate agent movements based on task execution.
-- Document integration protocols and update contributor guide.
+- Real-time web scraping and knowledge base updates.
+- Adaptive prompt refinement and self-reprogramming.
+- Scientific reasoning and synthesis path prediction.
+- Personalized recommendations based on user data.
 
+---
+
+## Internal IDE & Code Automation
+
+- Autonomous code writing, execution, and validation.
+- Contextual code generation and debugging.
+- Real-time feedback loop for self-improvement.
+- Automated codebase analysis and debugging.
+
+---
+
+## Memory & Knowledge Base
+
+- Dynamic memory for task continuity.
+- Conversation history and metadata management.
+- Persistent vector database integration (planned).
+- Continuous knowledge base updates.
+
+---
+
+## Self-Healing & Predictive Analytics
+
+- **SelfHealingManager:** Detects anomalies, triggers corrective routines.
+- **MLService:** Predicts faults before they occur.
+- Closed-loop resilience for continuous improvement.
+
+---
+
+## Testing & CI/CD
+
+- Unit tests for agents, plugins, self-healing, ML.
+- Integration tests for full workflows.
+- Automated testing pipelines.
+- Continuous validation of autonomous behaviors.
+- Documentation sync with code changes.
+
+---
+
+## Contributor Guide
+
+- **Branch Naming:**
+  - `feature/<issue-id>-description`
+  - `bugfix/<issue-id>-description`
+  - `release/v<version>`
+- **Commit Messages:**
+  - Format: `<type>(<scope>): <subject>`
+  - Types: feat, fix, docs, test, refactor, style, chore
+- **Pull Request Process:**
+  1. Create feature branch
+  2. Make changes
+  3. Run tests
+  4. Update documentation
+  5. Submit PR
+- **Documentation-First:** Update docs alongside code changes.
+- **Code Standards:** Follow PEP8, TypeScript strict mode, type hints, and docstrings.
+
+---
+
+## Directory Structure
+
+```
+├── .github/               # CI/CD configs
+├── src/
+│   ├── core/              # Core services and agents
+│   ├── modules/           # Feature modules and plugins
+│   ├── interfaces/        # Shared interfaces and types
+│   ├── ui/                # Legacy UI components
+│   └── utils/             # Utilities
+├── ui-react/              # Immersive React UI
+├── tests/                 # Test suites
+├── docs/                  # Documentation
+├── scripts/               # Build and utility scripts
+```
+
+---
+
+## Summary
+
+This document outlines the core components, workflows, and contributor guidelines for the Digital Double Virtual Workforce 3.5, ensuring alignment with the unified, autonomous, adaptive, and extensible platform vision.
+
+---

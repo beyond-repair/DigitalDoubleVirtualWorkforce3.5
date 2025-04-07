@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Pixelated Building UI Test</title>
+<style>
+  #building-container {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    background: rgba(0,0,0,0.2); /* semi-transparent */
+    border: 2px solid #555;
+    overflow: hidden;
+  }
+</style>
+</head>
+<body>
+<h2>Pixelated Building UI Test</h2>
+<div>
+  <input type="text" id="user-command" placeholder="Enter agent command..." style="width: 300px;">
+  <button id="send-command">Send Command</button>
+</div>
+<div id="building-container"></div>
+
+<script type="module">
+import { AgentVisualizerBridge } from './AgentVisualizerBridge.js';
+import AgentVisualState from './AgentVisualState.js';
+
+// Add mock agents once via the bridge
+const bridge = new AgentVisualizerBridge('building-container');
+bridge.initialize();
+
+// Simulate agent creation events
+['agent1', 'agent2', 'agent3'].forEach((id, idx) => {
+  bridge['onAgentCreated'](id, {
+    agentId: id,
+    position: { x: 50 + idx * 100, y: 50 + idx * 50 },
+    avatarUrl: '',
+    isSelected: false
+  });
+
+// === User command handler ===
+document.getElementById('send-command').onclick = async () => {
+  const input = document.getElementById('user-command');
+  const prompt = input.value;
+  if (!prompt) return;
+
+  try {
+    const response = await fetch('/api/agents/command', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt })
+    });
+    const data = await response.json();
+    const text = data.response || '';
+
+    // Example: "agent1 move to x=120 y=80"
+    const agentMatch = text.match(/(agent\w*)/i);
+    const xMatch = text.match(/x\s*=\s*(\d+)/i);
+    const yMatch = text.match(/y\s*=\s*(\d+)/i);
+
+    if (agentMatch && xMatch && yMatch) {
+      const agentId = agentMatch[1];
+      const x = parseInt(xMatch[1], 10);
+      const y = parseInt(yMatch[1], 10);
+
+      const metadata = AgentVisualState.getInstance().getMetadata(agentId) || {};
+      metadata.position = { x, y };
+      AgentVisualState.getInstance().setMetadata(agentId, metadata);
+
+      if (bridge && typeof bridge.render === 'function') {
+        bridge.render();
+      }
+    } else {
+      console.warn('Could not parse agent action from model response:', text);
+    }
+  } catch (err) {
+    console.error('Error sending user command:', err);
+  }
+};
+});
+
+// Optionally, simulate status changes or task assignments here
+
+// === AI-driven agent update loop ===
+async function updateAgentsFromModel() {
+  const agentIds = ['agent1', 'agent2', 'agent3'];
+
+  for (const agentId of agentIds) {
+    const prompt = `Where should ${agentId} move next?`;
+    try {
+      const response = await fetch('/api/agents/command', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      });
+      const data = await response.json();
+      const text = data.response || '';
+
+      // Simple coordinate extraction: look for 'x=number' and 'y=number'
+      const xMatch = text.match(/x\s*=\s*(\d+)/i);
+      const yMatch = text.match(/y\s*=\s*(\d+)/i);
+      if (xMatch && yMatch) {
+        const x = parseInt(xMatch[1], 10);
+        const y = parseInt(yMatch[1], 10);
+
+        const metadata = AgentVisualState.getInstance().getMetadata(agentId) || {};
+        metadata.position = { x, y };
+        AgentVisualState.getInstance().setMetadata(agentId, metadata);
+      }
+    } catch (err) {
+      console.error(`Error updating ${agentId}:`, err);
+    }
+  }
+
+  // Refresh visualization
+  if (bridge && typeof bridge.render === 'function') {
+    bridge.render();
+  }
+}
+
+// Call every 5 seconds
+setInterval(updateAgentsFromModel, 5000);
+</script>
+</body>
+</html>

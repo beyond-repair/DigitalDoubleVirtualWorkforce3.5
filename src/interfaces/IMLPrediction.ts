@@ -20,3 +20,11 @@ export interface ITrainingMetrics {
     f1Score: number;
     trainingDuration: number;
 }
+
+export interface IPredictedFault {
+    timestamp: Date;
+    faultType: string;
+    confidence: number;
+    details?: string;
+}
+

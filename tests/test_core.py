@@ -1,8 +1,7 @@
-import os
 import pytest
-from src.core.execution_engine import ExecutionEngine
-from src.core.task_planner import TaskPlanner
-from src.core.memory_manager import MemoryManager
+from src.python.core.execution_engine import ExecutionEngine
+from src.python.core.task_planner import TaskPlanner
+from src.python.core.memory_manager import MemoryManager
 
 
 def test_execution_engine():

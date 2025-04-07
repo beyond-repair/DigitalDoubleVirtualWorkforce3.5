@@ -4,8 +4,10 @@ import helmet from 'helmet';
 import http from 'http'; // Import http
 import { Server as SocketIOServer } from 'socket.io'; // Import socket.io Server
 import { createApiRoutes } from './routes/api.routes';
+import agentOrchestrationRouter from './controllers/AgentOrchestrationController';
 import { AgentController } from './controllers/agent.controller';
 import { AgentService } from '../core/services/agent.service';
+import Redis from 'ioredis';
 
 // Define Logger interface (using unknown[] for better type safety than any[])
 interface Logger {
@@ -51,6 +53,106 @@ export class ApiServer {
     this.app.use('/api/v1', createApiRoutes(agentController));
     // Add a simple health check route
     this.app.get('/health', (req, res) => res.status(200).send('OK'));
+
+    // Mount AI orchestration API
+    this.app.use('/api/agents', agentOrchestrationRouter);
+
+
+const redis = new Redis();
+const CONTROL_CHANNEL = 'system_control_channel';
+const RESPONSE_CHANNEL = 'system_control_channel_response';
+
+async function publishAndWait(command: string, args: Record<string, unknown>, timeoutMs = 5000): Promise<unknown> {
+  return new Promise((resolve, reject) => {
+    const id = Math.random().toString(36).substring(2);
+    const message = { command, args, id };
+    const sub = new Redis();
+    let timer: NodeJS.Timeout;
+
+    sub.subscribe(RESPONSE_CHANNEL, (err?: Error | null | undefined, result?: unknown) => {
+      if (err) return reject(err);
+      redis.publish(CONTROL_CHANNEL, JSON.stringify(message));
+      timer = setTimeout(() => {
+        sub.disconnect();
+        reject(new Error('Timeout waiting for response'));
+      }, timeoutMs);
+    });
+
+    sub.on('message', (_channel: string, msg: string) => {
+      try {
+        const data = JSON.parse(msg);
+        if (data.id === id) {
+          clearTimeout(timer);
+          sub.disconnect();
+          resolve(data);
+        }
+      } catch {
+        // Ignore JSON parse errors
+      }
+    });
+  });
+}
+
+// System Control Endpoints
+this.app.post('/control/type', async (req, res) => {
+  try {
+    const { text } = req.body;
+    const result = await publishAndWait('type_text', { text });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: (err as Error).message });
+  }
+});
+
+this.app.post('/control/mouse', async (req, res) => {
+  try {
+    const { x, y } = req.body;
+    const result = await publishAndWait('move_mouse', { x, y });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: (err as Error).message });
+  }
+});
+
+this.app.post('/control/launch', async (req, res) => {
+  try {
+    const { app_path } = req.body;
+    const result = await publishAndWait('launch_app', { app_path });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: (err as Error).message });
+  }
+});
+
+this.app.post('/control/close', async (req, res) => {
+  try {
+    const { process_name } = req.body;
+    const result = await publishAndWait('close_app', { process_name });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: (err as Error).message });
+  }
+});
+
+this.app.post('/control/script', async (req, res) => {
+  try {
+    const { script } = req.body;
+    const result = await publishAndWait('run_script', { script });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: (err as Error).message });
+  }
+});
+
+this.app.post('/control/screenshot', async (_req, res) => {
+  try {
+    const result = await publishAndWait('screenshot', {});
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: (err as Error).message });
+  }
+});
+
   }
 
   start(): void {

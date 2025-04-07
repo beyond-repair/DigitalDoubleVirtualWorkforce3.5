@@ -1,4 +1,4 @@
-import { IWorkloadPrediction } from '../interfaces/IMLPrediction';
+import { IWorkloadPrediction, IPredictedFault } from '../interfaces/IMLPrediction';
 import { ITimeSeriesData } from '../interfaces/IAnalytics';
 import { ModelTracker } from './ModelTracker';
 import { AnalyticsService } from './AnalyticsService';
@@ -17,9 +17,14 @@ export class MLService {
     private readonly SYSTEM_ADMIN_USER_ID = 'admin_system'; // Placeholder for user ID to notify
 
     // Inject NotificationService
+    /**
+     * Constructs the MLService.
+     * @param analyticsService Provides access to historical metrics for predictions
+     * @param notificationService Service to send alerts and notifications
+     */
     constructor(
-        analyticsService: AnalyticsService,
-        private notificationService: NotificationService // Added NotificationService dependency
+        private analyticsService: AnalyticsService,
+        private notificationService: NotificationService
     ) {
         this.modelTracker = new ModelTracker(analyticsService);
         this.modelTracker.registerModel(
@@ -27,7 +32,7 @@ export class MLService {
             this.currentModelVersion,
             { accuracy: 0, precision: 0, recall: 0, f1Score: 0, trainingDuration: 0 }
         );
-        console.log("MLService initialized."); // Added log
+        console.log("MLService initialized.");
     }
 
     public async predictWorkload(horizon: number): Promise<IWorkloadPrediction[]> {
@@ -49,6 +54,41 @@ export class MLService {
         }
 
         return predictions;
+}
+
+    private calculateConfidence(): number {
+        const recentAccuracy = this.modelTracker.getRecentAccuracy(
+            'workload-predictor',
+            this.currentModelVersion
+        );
+        const confidence = Math.max(0.5, recentAccuracy * 0.9);
+        return confidence;
+    }
+
+
+/**
+ * Predicts potential system faults based on historical anomaly data.
+ * Initially returns dummy data; extend with real ML logic.
+ */
+public async predictFaults(): Promise<import('../interfaces/IMLPrediction').IPredictedFault[]> {
+    const now = new Date();
+    return [
+        {
+            timestamp: new Date(now.getTime() + 60 * 60 * 1000), // 1 hour ahead
+            faultType: 'HighErrorRate',
+            confidence: 0.8,
+            details: 'Spike in error rate detected in recent analytics.'
+        },
+        {
+            timestamp: new Date(now.getTime() + 2 * 60 * 60 * 1000), // 2 hours ahead
+            faultType: 'ResourceExhaustion',
+            confidence: 0.7,
+            details: 'Predicted CPU/memory bottleneck based on trend.'
+        }
+    ];
+    }
+    /**
+
     }
 
     private calculateConfidence(): number {
@@ -108,18 +148,61 @@ export class MLService {
             );
             return false;
         }
+    
+    private calculateConfidence(): number {
+        const recentAccuracy = this.modelTracker.getRecentAccuracy(
+            'workload-predictor',
+            this.currentModelVersion
+        );
+        // Confidence calculation based on recent accuracy
+        const confidence = Math.max(0.5, recentAccuracy * 0.9); // Example calculation
+        return confidence;
     }
 
+    }
+
+    /**
+     * Predicts the number of tasks at a given timestamp.
+     * Uses a simple moving average of recent task counts from AnalyticsService (last 24 hours).
+     * Falls back to a default if no data is available or on error.
+     * @param timestamp The future time to predict for
+     * @returns Predicted task count (integer)
+     */
     private async predictTaskCount(timestamp: Date): Promise<number> {
-        // Placeholder: Implement actual prediction logic
-        // console.log(`Predicting task count for ${timestamp.toISOString()}`);
-        return 100; // Example value
+        try {
+            const recentData = this.analyticsService.getMetrics('task_count', 1); // last 1 day
+            if (!recentData || recentData.length === 0) {
+                return 100; // fallback default
+            }
+            const sum = recentData.reduce((acc, point) => acc + point.value, 0);
+            const avg = sum / recentData.length;
+            return Math.round(avg);
+        } catch (error) {
+            console.error("Error in predictTaskCount:", error);
+            return 100; // fallback on error
+        }
     }
 
+    /**
+     * Predicts the number of agents required at a given timestamp.
+     * Uses a simple moving average of recent agent counts from AnalyticsService (last 24 hours).
+     * Falls back to a default if no data is available or on error.
+     * @param timestamp The future time to predict for
+     * @returns Predicted agent count (integer)
+     */
     private async predictAgentCount(timestamp: Date): Promise<number> {
-        // Placeholder: Implement actual prediction logic
-        // console.log(`Predicting agent count for ${timestamp.toISOString()}`);
-        return 5; // Example value
+        try {
+            const recentData = this.analyticsService.getMetrics('agent_count', 1); // last 1 day
+            if (!recentData || recentData.length === 0) {
+                return 5; // fallback default
+            }
+            const sum = recentData.reduce((acc, point) => acc + point.value, 0);
+            const avg = sum / recentData.length;
+            return Math.round(avg);
+        } catch (error) {
+            console.error("Error in predictAgentCount:", error);
+            return 5; // fallback on error
+        }
     }
 
     // --- Input Processing and Error Handling ---
@@ -128,6 +211,22 @@ export class MLService {
         const { status, message, data } = result;
         return { status, message, data };
     }
+/**
+ * Trains or updates the ML model using accumulated data.
+ * Currently a stub; extend with actual ML training logic.
+ * @param force If true, forces retraining regardless of conditions
+ * @returns True if training was successful (stubbed)
+ */
+public async trainOrUpdateModel(force = false): Promise<boolean> {
+    try {
+        console.log(`Training ML model (force=${force})...`);
+        // TODO: Implement actual training logic here
+        return true;
+    } catch (error) {
+        console.error('Error during model training:', error);
+        return false;
+    }
+}
 
     public async handleError(error: Error): Promise<ProcessResult> {
         console.error("MLService encountered an error:", error); // Log error
