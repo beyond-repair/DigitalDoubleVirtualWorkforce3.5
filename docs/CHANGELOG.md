@@ -1,21 +1,11 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+## Sweep-074 (2026-09-06)
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+- Confirmed classification SUPERSEDED.
+- README banner updated with successor URL and archive-operator note.
+- No source changes. No history rewrite.
 
-## [Unreleased]
+## Prior
 
-### Added
-- Initial project structure
-- Core agent framework
-- Configuration system
-- Basic task queue implementation
-- Local model cache foundation
-- Git version control setup
-- Model quantization system with dynamic adaptation
-- Integration between model cache and quantizer
-- Test framework with pytest
-- Unit tests for core components
-- Coverage reporting
+Historical 3.5 line notes retained. See README.
