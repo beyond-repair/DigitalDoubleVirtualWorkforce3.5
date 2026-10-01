@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Governance
+- Sweep-193: claim cap recorded in `CLAIM_STATUS.md`. Banner invariant tests live in `tests_governance/` and do not import `src`.
+- Historical bullets below are retained as prior notes. They are not a verification claim.
+
 ### Added
 - Initial project structure
 - Core agent framework
