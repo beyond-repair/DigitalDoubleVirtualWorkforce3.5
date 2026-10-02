@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Claim-0 Finish repair (2026-10-02)
+- Archived misnamed `src/core/` dump files to `docs/archive_fragments/`.
+- Added working `DigitalDoubleAgent`, SQLite `StorageManager`, in-memory CAP cluster toys, offline `main.py` demo, and pytest suite.
+- `model_quantizer` is RAM-advice only (no torch dependency).
+- SUPERSEDED / Claim-0 banners retained; successor unchanged.
+
 ### Governance
 - Sweep-193: claim cap recorded in `CLAIM_STATUS.md`. Banner invariant tests live in `tests_governance/` and do not import `src`.
 - Historical bullets below are retained as prior notes. They are not a verification claim.
