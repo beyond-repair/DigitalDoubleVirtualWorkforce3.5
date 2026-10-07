@@ -19,11 +19,11 @@
 
 ## CI / Tests
 
-Product CI is not required. `.github/workflows/supersede-guard.yml` runs `tests_governance/` only. Local Claim-0 verification: `pip install -r requirements.txt && pytest && python main.py`.
+`.github/workflows/supersede-guard.yml` runs `tests_governance/` then `pip install -r requirements.txt` and `pytest -q`. That is Claim-0 offline verification only. Local check: `pip install -r requirements.txt && pytest && python main.py`.
 
 ## Archive
 
-GitHub `archived` flag is operator-gated. Do not delete history. Dump fragments live under `docs/archive_fragments/`.
+GitHub `archived` flag is operator-gated. Do not delete history. Dump fragments live under `docs/archive_fragments/`. See `SUPERSEDED.md`.
 
 ---
-*Claim-0 Finish repair; SUPERSEDED lock retained.*
+*Claim-0 Finish repair; SUPERSEDED lock retained. Sweep-270 extended CI only.*
