@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Sweep-270 (2026-10-07)
+- Extended `.github/workflows/supersede-guard.yml` to install `requirements.txt` and run `pytest -q` after the banner unittest. Claim remains 0. Not a product release.
+- Added `SUPERSEDED.md` and `docs/DISCOVERY.md`. Archive flag not set.
+
 ### Claim-0 Finish repair (2026-10-02)
 - Archived misnamed `src/core/` dump files to `docs/archive_fragments/`.
 - Added working `DigitalDoubleAgent`, SQLite `StorageManager`, in-memory CAP cluster toys, offline `main.py` demo, and pytest suite.
