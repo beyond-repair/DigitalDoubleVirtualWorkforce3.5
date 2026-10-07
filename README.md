@@ -1,9 +1,9 @@
 <div align="center">
 
 ```
-╔══════════════════════════════════════════════════════════════╗
+╔═════════════════════════════════════════════════════════════╗
 ║   ATOMIC DREAM LABS  ·  BEYOND-REPAIR                        ║
-╚══════════════════════════════════════════════════════════════╝
+╚═════════════════════════════════════════════════════════════╝
 ```
 
 # Digital Double Virtual Workforce 3.5
@@ -41,6 +41,7 @@ Historical 3.5-line dump (misnamed fragment files under `src/core/`) repaired so
 | CAP toy | `CapCluster` / quorum / partition status (in-memory) |
 | Quantizer | RAM advice stub (**no torch**) |
 | Dump fragments | Moved to `docs/archive_fragments/` |
+| CI | `supersede-guard` on `master`: banner unittest, then `pytest -q` (Claim-0 only) |
 
 ## What works (Claim-0)
 
@@ -57,6 +58,7 @@ Historical 3.5-line dump (misnamed fragment files under `src/core/`) repaired so
 - Real multi-node networking, consensus, or replication
 - Torch / dynamic quantization of real models
 - Equivalence with the canonical `Digital_Double_virtual_workforce` product
+- A green CI run as successor parity or an archive action
 
 ## Quick start
 
@@ -79,6 +81,7 @@ DigitalDoubleVirtualWorkforce3.5/
 ├── pytest.ini
 ├── CLAIM_STATUS.md
 ├── GOVERNANCE.md
+├── SUPERSEDED.md
 ├── src/core/               ← agent, CAP toy, storage, rules
 ├── src/models/             ← quantizer advice stub
 ├── tests/                  ← pytest suite
@@ -90,6 +93,7 @@ DigitalDoubleVirtualWorkforce3.5/
 
 - [CLAIM_STATUS.md](CLAIM_STATUS.md) — allowed / forbidden statements
 - [GOVERNANCE.md](GOVERNANCE.md)
+- [SUPERSEDED.md](SUPERSEDED.md)
 - Successor: [Digital_Double_virtual_workforce](https://github.com/beyond-repair/Digital_Double_virtual_workforce)
 - [ADL-Governance](https://github.com/beyond-repair/ADL-Governance) · [Claim levels 0–5](https://github.com/beyond-repair/ADL-Governance/blob/main/docs/CLAIM_VALIDATION.md)
 
